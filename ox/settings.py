@@ -16,7 +16,7 @@ from typing import Any, Dict
 import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-# ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
+ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
 # sys.path.insert(0, str(APPS_DIR))
 
@@ -24,7 +24,7 @@ env = environ.Env()
 READ_ENV_FILE = env.bool("READ_DOT_ENV_FILE", default=True)
 if READ_ENV_FILE:
     # OS environment variables take precedence over variables from .env
-    env.read_env(str(BASE_DIR / ".env"))
+    env.read_env(str(ROOT_DIR / ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -86,14 +86,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'ox.urls'
+ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [ROOT_DIR / 'templates']
         ,
-        'APP_DIRS': True,
+        # 'APP_DIRS': True,
         'OPTIONS': {
             "loaders": [
                 "django.template.loaders.filesystem.Loader",
@@ -121,9 +121,17 @@ WSGI_APPLICATION = 'ox.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+            'ENGINE': 'django.db.backends.mysql',   # 数据库引擎
+            'NAME': 'bullbit',  # 数据库名，先前创建的
+            'USER': 'bullbit',     # 用户名，可以自己创建用户
+            'PASSWORD': 'xN27Zs3RFpkP3XbF',  # 密码
+            'HOST': '8.130.26.14',  # mysql服务所在的主机ip
+            'PORT': '3306',         # mysql服务端口
     }
 }
 
@@ -162,7 +170,7 @@ USE_L10N = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#locale-paths
-LOCALE_PATHS = [str(BASE_DIR / "locale")]
+LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 
 
 # Static files (CSS, JavaScript, Images)
@@ -191,7 +199,7 @@ PASSWORD_HASHERS = [
 # MEDIA
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-MEDIA_ROOT = str(BASE_DIR / "media")
+MEDIA_ROOT = str(ROOT_DIR / "media")
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = "/media/"
 
@@ -215,7 +223,7 @@ REST_FRAMEWORK = {
 # ------------------------------------------------------------------------------
 # https://channels.readthedocs.io/en/latest/topics/channel_layers.html
 channel_layers_default_backend = env(
-    "DJANGO_CHANNELS_CHANNEL_LAYERS_DEFAULT_BACKEND", default="inmemory"
+    "DJANGO_CHANNELS_CHANNEL_LAYERS_DEFAULT_BACKEND", default="redis"
 )
 if channel_layers_default_backend == "inmemory":
     CHANNEL_LAYERS = {
@@ -234,7 +242,8 @@ elif channel_layers_default_backend == "redis":
                             "REDIS_URL", default="redis://8.130.26.14:6379/0"
                         )
                     }
-                ]
+                ],
+                "symmetric_encryption_keys": ['OxExchenge.2021'],
             },
         },
     }
@@ -248,7 +257,7 @@ else:
 # FIXTURES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#fixture-dirs
-FIXTURE_DIRS = (str(BASE_DIR / "fixtures"),)
+FIXTURE_DIRS = (str(ROOT_DIR / "fixtures"),)
 
 # SECURITY
 # ------------------------------------------------------------------------------
@@ -347,3 +356,11 @@ SPECTACULAR_SETTINGS: Dict[str, Any] = {
 # ------------------------------------------------------------------------------
 # https://florimondmanca.github.io/djangorestframework-api-key/guide/#custom-header
 API_KEY_CUSTOM_HEADER = "HTTP_X_API_KEY"
+
+# URLS
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf
+# ROOT_URLCONF = "config.urls"
+# https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
+WSGI_APPLICATION = "config.wsgi.application"
+ASGI_APPLICATION = "config.routing.application"

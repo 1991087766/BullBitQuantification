@@ -1,0 +1,10 @@
+USE_DOCKER=yes
+DJANGO_SETTINGS_MODULE=config.settings.local
+REDIS_URL=redis://8.130.26.14:6379/0
+
+DJANGO_SETTINGS_MODULE=config.settings.production
+DJANGO_SECRET_KEY=yufuquant.s7d+@=t*yuo!jtmjfrde7l(qj^*nm8b4v44ioh8!
+DJANGO_ALLOWED_HOSTS=8.130.26.14
+SENTRY_DSN=
+
+
