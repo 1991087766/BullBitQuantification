@@ -224,7 +224,7 @@ elif channel_layers_default_backend == "redis":
                 "hosts": [
                     {
                         "address": env.str(
-                            "REDIS_URL", default="redis://localhost:6379/0"
+                            "REDIS_URL", default="redis://8.130.26.14:6379/0"
                         )
                     }
                 ]
